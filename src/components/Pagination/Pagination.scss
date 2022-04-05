@@ -1,0 +1,43 @@
+.pagination {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 15px 0;
+
+    >*{
+        height: 45px;
+        font-size: 18px;
+        margin: 5px 10px;
+    }
+
+    p{
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+
+    button {
+        color: white;
+        padding: 10px 15px;
+        background: black;
+        border: 2px solid white;
+        cursor: pointer;
+        transition: all 0.2s ease-out;
+
+        &:hover, &.active {
+            border-color: rgb(111, 255, 45);
+            background: rgb(111, 255, 45);
+            color: white;
+        }
+    }
+
+    select{
+        color: white;
+        padding: 10px;
+        background: black;
+        border: 2px solid white;
+        cursor: pointer;
+        transition: all 0.2s ease-out;
+    }
+}
+

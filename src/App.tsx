@@ -1,12 +1,12 @@
 import React from 'react';
-import MarketPage from "./pages/MarketPage/MarketPage";
+import ProductsPage from "./pages/ProductsPage/ProductsPage";
 import Navbar from "./components/Navbar/Navbar";
 
 function App() {
     return (
         <div>
             <Navbar />
-            <MarketPage />
+            <ProductsPage />
         </div>
     );
 }

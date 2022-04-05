@@ -1,13 +1,15 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import './MarketPage.scss'
+import './ProductsPage.scss'
 import Card from '../../components/Card/Card';
 import {fetchProducts} from "../../api/products";
-import usePagination from '../../hooks/UsePagination';
+import Pagination from "../../components/Pagination/Pagination";
 
 
-const MarketPage = () => {
+const ProductsPage = () => {
     const [products, setProducts] = useState<Array<any>>([])
     const [isFiltered, serIsFiltered] = useState(false)
+    const [firstIndex, setFirstIndex] = useState(0)
+    const [lastIndex, setLastIndex] = useState(5)
 
     const getProducts = async () => {
         const response = await fetchProducts()
@@ -23,19 +25,6 @@ const MarketPage = () => {
         },
         [products, isFiltered])
 
-    const {
-        firstContentIndex,
-        lastContentIndex,
-        nextPage,
-        prevPage,
-        page,
-        setPage,
-        totalPages,
-    } = usePagination({
-        contentPerPage: 8,
-        count: filteredProducts.length,
-    });
-
     const availabilityFilter = () => {
         serIsFiltered(!isFiltered)
     }
@@ -49,31 +38,13 @@ const MarketPage = () => {
             {products.length > 0
                 ? <div className={'cards'}>
                     <div className={'card-navigation'}>
-                        <div className={''}>
+                        <Pagination
+                            contentPerPage={5}
+                            count={filteredProducts.length}
+                            setLastIndex={setLastIndex}
+                            setFirstIndex={setFirstIndex}
+                        />
 
-                        </div>
-                        <div className={'pagination'}>
-                            <p className="text">
-                                {page}/{totalPages}
-                            </p>
-                            <button onClick={prevPage} className="page">
-                                &larr;
-                            </button>
-                            {/* @ts-ignore */}
-                            {[...Array(totalPages).keys()]
-                                .map((el) => (
-                                    <button
-                                        onClick={() => setPage(el + 1)}
-                                        key={el}
-                                        className={`page ${page === el + 1 ? "active" : ""}`}
-                                    >
-                                        {el + 1}
-                                    </button>))
-                            }
-                            <button onClick={nextPage} className="page">
-                                &rarr;
-                            </button>
-                        </div>
                         <div className={'filter-by-quantity'}>
                             <label htmlFor={'checkFilt'}>В наличии:</label>&nbsp;
                             <input type="checkbox" id={'checkFilt'} name={'checkFilt'} checked={isFiltered} onChange={availabilityFilter}/>
@@ -81,7 +52,7 @@ const MarketPage = () => {
                     </div>
                     <div className={'card-list'}>
                         {filteredProducts
-                            .slice(firstContentIndex, lastContentIndex)
+                            .slice(firstIndex, lastIndex)
                             .map((product) =>
                                 <Card author={product['created_by']['display_name']}
                                       name={product['name']}
@@ -99,5 +70,5 @@ const MarketPage = () => {
     );
 }
 
-export default MarketPage;
+export default ProductsPage;
 
