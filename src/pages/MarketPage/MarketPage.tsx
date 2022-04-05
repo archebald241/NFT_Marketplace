@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import './MarketPage.scss'
 import Card from '../../components/Card/Card';
 import {fetchProducts} from "../../api/products";
+import usePagination from '../../hooks/UsePagination';
 
 
 const MarketPage = () => {
@@ -22,6 +23,19 @@ const MarketPage = () => {
         },
         [products, isFiltered])
 
+    const {
+        firstContentIndex,
+        lastContentIndex,
+        nextPage,
+        prevPage,
+        page,
+        setPage,
+        totalPages,
+    } = usePagination({
+        contentPerPage: 8,
+        count: filteredProducts.length,
+    });
+
     const availabilityFilter = () => {
         serIsFiltered(!isFiltered)
     }
@@ -38,6 +52,28 @@ const MarketPage = () => {
                         <div className={''}>
 
                         </div>
+                        <div className={'pagination'}>
+                            <p className="text">
+                                {page}/{totalPages}
+                            </p>
+                            <button onClick={prevPage} className="page">
+                                &larr;
+                            </button>
+                            {/* @ts-ignore */}
+                            {[...Array(totalPages).keys()]
+                                .map((el) => (
+                                    <button
+                                        onClick={() => setPage(el + 1)}
+                                        key={el}
+                                        className={`page ${page === el + 1 ? "active" : ""}`}
+                                    >
+                                        {el + 1}
+                                    </button>))
+                            }
+                            <button onClick={nextPage} className="page">
+                                &rarr;
+                            </button>
+                        </div>
                         <div className={'filter-by-quantity'}>
                             <label htmlFor={'checkFilt'}>В наличии:</label>&nbsp;
                             <input type="checkbox" id={'checkFilt'} name={'checkFilt'} checked={isFiltered} onChange={availabilityFilter}/>
@@ -45,6 +81,7 @@ const MarketPage = () => {
                     </div>
                     <div className={'card-list'}>
                         {filteredProducts
+                            .slice(firstContentIndex, lastContentIndex)
                             .map((product) =>
                                 <Card author={product['created_by']['display_name']}
                                       name={product['name']}
