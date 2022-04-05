@@ -1,0 +1,13 @@
+main{
+    margin: 100px auto auto;
+
+    .cards{
+        .card-list{
+            width: 85%;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+}
